@@ -12,7 +12,6 @@ import de.byoc.eventing.events.FoodOrdered;
 import de.byoc.eventing.events.InvoicePaid;
 import org.axonframework.eventhandling.GenericEventMessage;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
-import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine;
 import org.axonframework.messaging.StreamableMessageSource;
 import org.junit.Before;
@@ -64,12 +63,11 @@ public class TestHandlerTest {
 
   private StreamableMessageSource<?> given(Object... events) {
     final InMemoryEventStorageEngine engine = new InMemoryEventStorageEngine();
-    engine.appendEvents(
+    EmbeddedEventStore es = new EmbeddedEventStore(engine);
+    es.publish(
             Stream.of(events)
                     .map(payload -> new GenericEventMessage<>(payload))
                     .collect(Collectors.toList()));
-
-    final EventStore es = new EmbeddedEventStore(engine);
     return es;
   }
 
