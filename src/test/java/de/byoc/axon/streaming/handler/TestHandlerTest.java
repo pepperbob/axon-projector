@@ -68,6 +68,7 @@ public class TestHandlerTest {
             Stream.of(events)
                     .map(payload -> new GenericEventMessage<>(payload))
                     .collect(Collectors.toList()));
+    
     return es;
   }
 
